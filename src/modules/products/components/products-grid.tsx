@@ -8,8 +8,8 @@ type Props = {
 export function ProductsGrid({ products }: Props) {
   if (products.length === 0) {
     return (
-      <div className="flex min-h-60 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-slate-950/40 p-8 text-center">
-        <p className="text-sm text-slate-400">
+      <div className="flex min-h-60 items-center justify-center border border-dashed border-neutral-200 bg-neutral-50 p-8 text-center">
+        <p className="text-sm text-neutral-500">
           Nothing here yet. Check back soon for new arrivals.
         </p>
       </div>
@@ -17,7 +17,7 @@ export function ProductsGrid({ products }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

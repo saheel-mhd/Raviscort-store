@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import { extractErrorMessage } from '@/api/client'
 import { usePageTitle } from '@/hooks/use-page-title'
 import { useMyOrders } from '@/modules/orders/hooks/use-my-orders'
 import { orderDetailPath, routePaths } from '@/routes/paths'
 import { PaginationControls } from '@/shared/pagination-controls'
-import { useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
 
 const currencyFormatter = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 2,
@@ -33,21 +32,21 @@ export default function MyOrdersPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <span className="text-xs uppercase tracking-[0.3em] text-sky-300">Account</span>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">My orders</h1>
+        <span className="text-xs uppercase tracking-[0.4em] text-neutral-500">Account</span>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">My orders</h1>
       </div>
 
       {query.isLoading ? (
-        <p className="text-sm text-slate-400">Loading orders…</p>
+        <p className="text-sm text-neutral-500">Loading orders…</p>
       ) : query.isError ? (
-        <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+        <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
           {extractErrorMessage(query.error, 'Failed to load orders')}
         </p>
       ) : query.data && query.data.orders.length === 0 ? (
-        <div className="flex min-h-40 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/10 bg-slate-950/40 p-8 text-center">
-          <p className="text-sm text-slate-400">You haven’t placed any orders yet.</p>
+        <div className="flex min-h-40 flex-col items-center justify-center gap-3 border border-dashed border-neutral-200 bg-neutral-50 p-8 text-center">
+          <p className="text-sm text-neutral-500">You haven’t placed any orders yet.</p>
           <Link
-            className="inline-flex items-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
+            className="inline-flex items-center bg-neutral-900 px-5 py-2.5 text-sm font-semibold uppercase tracking-widest text-white transition hover:bg-neutral-800"
             to={routePaths.products}
           >
             Shop now
@@ -55,26 +54,26 @@ export default function MyOrdersPage() {
         </div>
       ) : query.data ? (
         <div className="flex flex-col gap-4">
-          <ul className="flex flex-col divide-y divide-white/5 rounded-2xl border border-white/10 bg-slate-950/60">
+          <ul className="flex flex-col divide-y divide-neutral-200 border border-neutral-200">
             {query.data.orders.map((order) => (
               <li key={order.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <Link
-                    className="font-medium text-white hover:text-sky-300"
+                    className="font-medium text-neutral-900 hover:underline"
                     to={orderDetailPath(order.id)}
                   >
                     {order.orderNumber}
                   </Link>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-neutral-500">
                     {dateFormatter.format(new Date(order.createdAt))} · {order.items.length} item
                     {order.items.length === 1 ? '' : 's'}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center rounded-full bg-sky-500/10 px-3 py-1 text-xs font-medium text-sky-300">
+                  <span className="inline-flex items-center bg-neutral-900 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white">
                     {order.status}
                   </span>
-                  <span className="text-sm font-semibold text-white tabular-nums">
+                  <span className="text-sm font-semibold text-neutral-900 tabular-nums">
                     ${currencyFormatter.format(order.totalAmount)}
                   </span>
                 </div>

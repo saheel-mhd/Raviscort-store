@@ -11,9 +11,7 @@ import type {
   ProductSortField,
   SortOrder,
 } from '@/modules/products/types/product.types'
-import { PaginationControls } from '@/shared/pagination-controls'
-
-const DEFAULT_LIMIT = 12
+const DEFAULT_LIMIT = 24
 
 function parseParams(searchParams: URLSearchParams): ProductListParams {
   const page = Number(searchParams.get('page') ?? '1') || 1
@@ -53,9 +51,9 @@ export default function ProductsListPage() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <span className="text-xs uppercase tracking-[0.3em] text-sky-300">Catalog</span>
-        <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Shop</h1>
-        <p className="max-w-xl text-sm text-slate-400">
+        <span className="text-xs uppercase tracking-[0.4em] text-neutral-500">Catalog</span>
+        <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">Shop</h1>
+        <p className="max-w-xl text-sm text-neutral-500">
           Every product is handpicked and kept in stock for fast delivery.
         </p>
       </div>
@@ -63,23 +61,16 @@ export default function ProductsListPage() {
       <ProductsToolbar params={params} onChange={updateParams} />
 
       {query.isLoading ? (
-        <div className="flex min-h-60 items-center justify-center text-sm text-slate-400">
+        <div className="flex min-h-60 items-center justify-center text-sm text-neutral-500">
           Loading products…
         </div>
       ) : query.isError ? (
-        <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+        <div className="border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {extractErrorMessage(query.error, 'Failed to load products')}
         </div>
       ) : query.data ? (
         <div className="flex flex-col gap-8">
           <ProductsGrid products={query.data.products} />
-          <PaginationControls
-            limit={query.data.pagination.limit}
-            onChange={(page) => updateParams({ page })}
-            page={query.data.pagination.page}
-            total={query.data.pagination.total}
-            totalPages={query.data.pagination.totalPages}
-          />
         </div>
       ) : null}
     </div>

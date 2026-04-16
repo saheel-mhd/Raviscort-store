@@ -9,7 +9,7 @@ type Props = {
 }
 
 const buttonBase =
-  'inline-flex items-center gap-1 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-medium text-slate-200 transition hover:border-white/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-40'
+  'inline-flex items-center gap-1 border border-neutral-300 bg-white px-3 py-2 text-xs font-medium uppercase tracking-widest text-neutral-900 transition hover:border-neutral-900 disabled:cursor-not-allowed disabled:opacity-40'
 
 export function PaginationControls({ page, totalPages, total, limit, onChange }: Props) {
   if (total === 0) return null
@@ -19,10 +19,10 @@ export function PaginationControls({ page, totalPages, total, limit, onChange }:
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-xs text-slate-400">
-        Showing <span className="text-slate-200">{start}</span>–
-        <span className="text-slate-200">{end}</span> of{' '}
-        <span className="text-slate-200">{total}</span>
+      <p className="text-xs text-neutral-500">
+        Showing <span className="text-neutral-900">{start}</span>–
+        <span className="text-neutral-900">{end}</span> of{' '}
+        <span className="text-neutral-900">{total}</span>
       </p>
       <div className="flex items-center gap-2">
         <button
@@ -32,10 +32,10 @@ export function PaginationControls({ page, totalPages, total, limit, onChange }:
           onClick={() => onChange(page - 1)}
           type="button"
         >
-          <ChevronLeft className="size-3.5" />
+          <ChevronLeft className="size-3.5" strokeWidth={1.5} />
           Previous
         </button>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-neutral-500">
           Page {page} / {Math.max(totalPages, 1)}
         </span>
         <button
@@ -46,7 +46,7 @@ export function PaginationControls({ page, totalPages, total, limit, onChange }:
           type="button"
         >
           Next
-          <ChevronRight className="size-3.5" />
+          <ChevronRight className="size-3.5" strokeWidth={1.5} />
         </button>
       </div>
     </div>

@@ -26,9 +26,9 @@ export default function LoginPage() {
   return (
     <section className="mx-auto flex w-full max-w-md flex-col gap-8 py-12">
       <div className="flex flex-col gap-2 text-center">
-        <span className="text-xs uppercase tracking-[0.3em] text-sky-300">Account</span>
-        <h1 className="text-3xl font-semibold text-white">Sign in</h1>
-        <p className="text-sm text-slate-400">Welcome back — let’s get you to checkout.</p>
+        <span className="text-xs uppercase tracking-[0.4em] text-neutral-500">Account</span>
+        <h1 className="text-3xl font-semibold text-neutral-900">Sign in</h1>
+        <p className="text-sm text-neutral-500">Welcome back — let’s get you to checkout.</p>
       </div>
 
       <AuthForm
@@ -43,10 +43,10 @@ export default function LoginPage() {
         submitLabel="Sign in"
       />
 
-      <p className="text-center text-sm text-slate-400">
+      <p className="text-center text-sm text-neutral-500">
         New here?{' '}
         <Link
-          className="text-sky-300 hover:text-sky-200"
+          className="text-neutral-900 underline underline-offset-4 hover:text-neutral-700"
           state={location.state}
           to={routePaths.register}
         >

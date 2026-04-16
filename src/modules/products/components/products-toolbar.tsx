@@ -19,7 +19,7 @@ const sortOptions: { label: string; value: ProductSortField; order: SortOrder }[
 ]
 
 const inputClasses =
-  'h-11 rounded-xl border border-white/10 bg-slate-950/60 text-sm text-white placeholder:text-slate-500 focus:border-sky-400/50 focus:outline-none'
+  'h-11 border border-neutral-300 bg-white text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none'
 
 export function ProductsToolbar({ params, onChange }: Props) {
   const currentSort = sortOptions.find(
@@ -29,7 +29,7 @@ export function ProductsToolbar({ params, onChange }: Props) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="relative flex-1 sm:max-w-md">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" strokeWidth={1.5} />
         <input
           className={`${inputClasses} w-full pl-9 pr-3`}
           onChange={(event) => onChange({ search: event.target.value || undefined, page: 1 })}

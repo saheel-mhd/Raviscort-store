@@ -26,9 +26,9 @@ export default function RegisterPage() {
   return (
     <section className="mx-auto flex w-full max-w-md flex-col gap-8 py-12">
       <div className="flex flex-col gap-2 text-center">
-        <span className="text-xs uppercase tracking-[0.3em] text-sky-300">Account</span>
-        <h1 className="text-3xl font-semibold text-white">Create an account</h1>
-        <p className="text-sm text-slate-400">One account for checkout and order tracking.</p>
+        <span className="text-xs uppercase tracking-[0.4em] text-neutral-500">Account</span>
+        <h1 className="text-3xl font-semibold text-neutral-900">Create an account</h1>
+        <p className="text-sm text-neutral-500">One account for checkout and order tracking.</p>
       </div>
 
       <AuthForm
@@ -43,10 +43,10 @@ export default function RegisterPage() {
         submitLabel="Create account"
       />
 
-      <p className="text-center text-sm text-slate-400">
+      <p className="text-center text-sm text-neutral-500">
         Already have an account?{' '}
         <Link
-          className="text-sky-300 hover:text-sky-200"
+          className="text-neutral-900 underline underline-offset-4 hover:text-neutral-700"
           state={location.state}
           to={routePaths.login}
         >

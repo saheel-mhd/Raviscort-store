@@ -1,3 +1,19 @@
+export type ProductVariant = {
+  id: string
+  unitId: string
+  stock: number
+  unit: {
+    id: string
+    name: string
+    shortName: string
+    category: {
+      id: string
+      name: string
+      shortName: string
+    }
+  }
+}
+
 export type Product = {
   id: string
   name: string
@@ -5,8 +21,11 @@ export type Product = {
   sku: string
   description: string | null
   price: number
-  stock: number
   isActive: boolean
+  cardImage: string | null
+  mainImage: string | null
+  galleryImages: string[]
+  variants: ProductVariant[]
   createdAt: string
   updatedAt: string
 }

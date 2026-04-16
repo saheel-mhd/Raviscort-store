@@ -1,11 +1,18 @@
 export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered'
 
 export type OrderItemSnapshot = {
+  productVariantId?: string
   productId: string
   name: string
   slug: string
   sku: string
-  price: number
+  unitId?: string
+  unitName?: string
+  unitShortName?: string
+  unitCategoryId?: string
+  unitCategoryName?: string
+  unitPrice?: number
+  price?: number
   quantity: number
   lineTotal?: number
 }
@@ -37,7 +44,7 @@ export type OrdersListResponse = {
 }
 
 export type CreateOrderInput = {
-  items: { productId: string; quantity: number }[]
+  items: { productVariantId: string; quantity: number }[]
 }
 
 export type MyOrdersParams = {

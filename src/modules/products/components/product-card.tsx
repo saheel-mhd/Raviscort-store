@@ -14,31 +14,38 @@ type Props = {
 }
 
 export function ProductCard({ product }: Props) {
-  const outOfStock = product.stock === 0
+  const totalStock = product.variants.reduce((sum, v) => sum + v.stock, 0)
+  const outOfStock = totalStock === 0
 
   return (
     <Link
       to={productPath(product.id)}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/60 transition hover:border-white/20 hover:bg-slate-950/80"
+      className="group flex flex-col gap-3 text-neutral-900"
     >
-      <div className="flex aspect-square items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950">
-        <Package className="size-10 text-slate-700 transition group-hover:text-slate-500" />
-      </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="text-sm font-semibold text-white">{product.name}</h3>
-        <p className="text-xs text-slate-500">SKU {product.sku}</p>
-        <div className="mt-auto flex items-center justify-between pt-3">
-          <span className="text-base font-semibold text-white">
-            ${currencyFormatter.format(product.price)}
+      <div className="relative aspect-square overflow-hidden bg-neutral-100">
+        {product.cardImage ? (
+          <img
+            alt={product.name}
+            className="size-full object-cover transition duration-500 group-hover:scale-[1.02]"
+            loading="lazy"
+            src={product.cardImage}
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center">
+            <Package className="size-10 text-neutral-300 transition group-hover:text-neutral-400" strokeWidth={1} />
+          </div>
+        )}
+        {outOfStock ? (
+          <span className="absolute left-3 top-3 bg-white/90 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-900">
+            Sold out
           </span>
-          {outOfStock ? (
-            <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-xs font-medium text-red-300">
-              Sold out
-            </span>
-          ) : (
-            <span className="text-xs text-slate-400">In stock</span>
-          )}
-        </div>
+        ) : null}
+      </div>
+      <div className="flex flex-col gap-1">
+        <h3 className="text-sm font-medium text-neutral-900 group-hover:underline">
+          {product.name}
+        </h3>
+        <p className="text-sm text-neutral-600">${currencyFormatter.format(product.price)}</p>
       </div>
     </Link>
   )

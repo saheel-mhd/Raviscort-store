@@ -30,7 +30,10 @@ export default function CheckoutPage() {
   const handlePlaceOrder = () => {
     mutate(
       {
-        items: items.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+        items: items.map((item) => ({
+          productVariantId: item.productVariantId,
+          quantity: item.quantity,
+        })),
       },
       {
         onSuccess: (order) => {
@@ -42,33 +45,35 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
+    <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
       <div className="flex flex-col gap-6">
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Checkout</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Checkout</h1>
 
-        <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
+        <section className="border border-neutral-200 bg-white p-6">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
             Account
           </h2>
-          <p className="mt-3 text-sm text-slate-400">
-            Signed in as <span className="text-white">{user?.email}</span>
+          <p className="mt-3 text-sm text-neutral-600">
+            Signed in as <span className="text-neutral-900">{user?.email}</span>
           </p>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
+        <section className="border border-neutral-200 bg-white p-6">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
             Order review
           </h2>
-          <ul className="mt-4 flex flex-col divide-y divide-white/5 text-sm">
+          <ul className="mt-4 flex flex-col divide-y divide-neutral-200 text-sm">
             {items.map((item) => (
-              <li key={item.productId} className="flex justify-between gap-4 py-3">
+              <li key={item.productVariantId} className="flex justify-between gap-4 py-3">
                 <div className="min-w-0">
-                  <p className="truncate font-medium text-white">{item.name}</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="truncate font-medium text-neutral-900">
+                    {item.name} · <span className="text-neutral-500">{item.sizeShortName}</span>
+                  </p>
+                  <p className="text-xs text-neutral-500">
                     {item.quantity} × ${currencyFormatter.format(item.price)}
                   </p>
                 </div>
-                <span className="tabular-nums text-white">
+                <span className="tabular-nums text-neutral-900">
                   ${currencyFormatter.format(item.quantity * item.price)}
                 </span>
               </li>
@@ -77,35 +82,35 @@ export default function CheckoutPage() {
         </section>
 
         {error ? (
-          <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+          <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
             {extractErrorMessage(error, 'Unable to place order')}
           </p>
         ) : null}
       </div>
 
-      <aside className="flex h-fit flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-        <h2 className="text-lg font-semibold text-white">Summary</h2>
-        <div className="flex items-center justify-between text-sm text-slate-300">
+      <aside className="flex h-fit flex-col gap-4 border border-neutral-200 bg-neutral-50 p-6">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-900">Summary</h2>
+        <div className="flex items-center justify-between text-sm text-neutral-700">
           <span>Subtotal</span>
           <span className="tabular-nums">${currencyFormatter.format(subtotal)}</span>
         </div>
-        <div className="flex items-center justify-between text-sm text-slate-500">
+        <div className="flex items-center justify-between text-sm text-neutral-500">
           <span>Shipping</span>
           <span>Free · at cost later</span>
         </div>
-        <div className="mt-2 flex items-center justify-between border-t border-white/5 pt-4 text-base font-semibold text-white">
+        <div className="mt-2 flex items-center justify-between border-t border-neutral-200 pt-4 text-base font-semibold text-neutral-900">
           <span>Total</span>
           <span className="tabular-nums">${currencyFormatter.format(subtotal)}</span>
         </div>
         <button
-          className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-2 inline-flex items-center justify-center gap-2 bg-neutral-900 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isPending}
           onClick={handlePlaceOrder}
           type="button"
         >
           {isPending ? (
             <>
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-4 animate-spin" strokeWidth={1.5} />
               Placing order…
             </>
           ) : (
@@ -113,7 +118,7 @@ export default function CheckoutPage() {
           )}
         </button>
         <Link
-          className="text-center text-xs text-slate-400 hover:text-white"
+          className="text-center text-xs text-neutral-500 hover:text-neutral-900"
           to={routePaths.cart}
         >
           Back to cart

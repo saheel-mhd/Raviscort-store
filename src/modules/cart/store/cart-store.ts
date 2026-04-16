@@ -9,8 +9,8 @@ type CartStore = {
   items: CartItem[]
   hasHydrated: boolean
   addItem: (item: AddInput) => void
-  setQuantity: (productId: string, quantity: number) => void
-  removeItem: (productId: string) => void
+  setQuantity: (productVariantId: string, quantity: number) => void
+  removeItem: (productVariantId: string) => void
   clear: () => void
   setHasHydrated: (value: boolean) => void
 }
@@ -30,20 +30,24 @@ export const useCartStore = create<CartStore>()(
       addItem: (input) => {
         set((state) => {
           const requested = input.quantity ?? 1
-          const existing = state.items.find((item) => item.productId === input.productId)
+          const existing = state.items.find(
+            (item) => item.productVariantId === input.productVariantId,
+          )
 
           if (existing) {
             const nextQty = clampQuantity(existing.quantity + requested, input.maxStock)
             if (nextQty === 0) {
               return {
-                items: state.items.filter((item) => item.productId !== input.productId),
+                items: state.items.filter(
+                  (item) => item.productVariantId !== input.productVariantId,
+                ),
               }
             }
             return {
               items: state.items.map((item) =>
-                item.productId === input.productId
+                item.productVariantId === input.productVariantId
                   ? { ...item, quantity: nextQty, maxStock: input.maxStock, price: input.price }
-                  : item
+                  : item,
               ),
             }
           }
@@ -55,6 +59,7 @@ export const useCartStore = create<CartStore>()(
             items: [
               ...state.items,
               {
+                productVariantId: input.productVariantId,
                 productId: input.productId,
                 name: input.name,
                 slug: input.slug,
@@ -62,35 +67,39 @@ export const useCartStore = create<CartStore>()(
                 price: input.price,
                 quantity: qty,
                 maxStock: input.maxStock,
+                sizeName: input.sizeName,
+                sizeShortName: input.sizeShortName,
+                unitCategoryName: input.unitCategoryName,
+                cardImage: input.cardImage,
               },
             ],
           }
         })
       },
 
-      setQuantity: (productId, quantity) => {
+      setQuantity: (productVariantId, quantity) => {
         set((state) => {
-          const existing = state.items.find((item) => item.productId === productId)
+          const existing = state.items.find((item) => item.productVariantId === productVariantId)
           if (!existing) return state
 
           const nextQty = clampQuantity(quantity, existing.maxStock)
           if (nextQty === 0) {
             return {
-              items: state.items.filter((item) => item.productId !== productId),
+              items: state.items.filter((item) => item.productVariantId !== productVariantId),
             }
           }
 
           return {
             items: state.items.map((item) =>
-              item.productId === productId ? { ...item, quantity: nextQty } : item
+              item.productVariantId === productVariantId ? { ...item, quantity: nextQty } : item,
             ),
           }
         })
       },
 
-      removeItem: (productId) => {
+      removeItem: (productVariantId) => {
         set((state) => ({
-          items: state.items.filter((item) => item.productId !== productId),
+          items: state.items.filter((item) => item.productVariantId !== productVariantId),
         }))
       },
 
@@ -99,7 +108,7 @@ export const useCartStore = create<CartStore>()(
       setHasHydrated: (value) => set({ hasHydrated: value }),
     }),
     {
-      name: 'raviscort-cart',
+      name: 'raviscort-cart-v2',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ items: state.items }),
       onRehydrateStorage: () => (state) => {
