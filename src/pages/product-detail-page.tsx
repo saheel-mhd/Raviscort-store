@@ -1,13 +1,19 @@
 import { useMemo, useState } from 'react'
-import { ArrowLeft, Package, ShoppingBag } from 'lucide-react'
+import { ArrowLeft, Heart, Package, ShoppingBag } from 'lucide-react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import { extractErrorMessage } from '@/api/client'
 import { usePageTitle } from '@/hooks/use-page-title'
+import {
+  useAddToWishlist,
+  useRemoveFromWishlist,
+  useWishlist,
+} from '@/modules/account/hooks/use-wishlist'
 import { useCartActions, useCartItems } from '@/modules/cart/hooks/use-cart'
 import { useProduct } from '@/modules/products/hooks/use-product'
 import type { ProductVariant } from '@/modules/products/types/product.types'
 import { routePaths } from '@/routes/paths'
+import { useAuthStore } from '@/store/auth-store'
 
 const currencyFormatter = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 2,
@@ -23,6 +29,13 @@ export default function ProductDetailPage() {
   const [activeImage, setActiveImage] = useState<string | null>(null)
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null)
   const [sizeError, setSizeError] = useState<string | null>(null)
+
+  const authStatus = useAuthStore((state) => state.status)
+  const wishlistQuery = useWishlist()
+  const addToWishlist = useAddToWishlist()
+  const removeFromWishlist = useRemoveFromWishlist()
+  const wishlistIds = wishlistQuery.data?.productIds ?? []
+  const inWishlist = query.data ? wishlistIds.includes(query.data.id) : false
 
   usePageTitle(query.data?.name)
 
@@ -75,6 +88,19 @@ export default function ProductDetailPage() {
   const handleSelectVariant = (variantId: string) => {
     setSelectedVariantId(variantId)
     setSizeError(null)
+  }
+
+  const handleWishlistToggle = () => {
+    if (!query.data) return
+    if (authStatus !== 'authenticated') {
+      navigate(routePaths.login)
+      return
+    }
+    if (inWishlist) {
+      removeFromWishlist.mutate(query.data.id)
+    } else {
+      addToWishlist.mutate(query.data.id)
+    }
   }
 
   const noStockForSelected = selectedVariant ? selectedVariant.stock === 0 : false
@@ -152,15 +178,31 @@ export default function ProductDetailPage() {
               </span>
             </div>
 
-            <button
-              type="button"
-              disabled={totalStock === 0 || noStockForSelected}
-              className="inline-flex items-center justify-center gap-2 bg-neutral-900 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500"
-              onClick={handleButtonClick}
-            >
-              <ShoppingBag className="size-4" strokeWidth={1.5} />
-              {inCart ? 'View cart' : 'Add to cart'}
-            </button>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                disabled={totalStock === 0 || noStockForSelected}
+                className="inline-flex items-center justify-center gap-2 bg-neutral-900 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500"
+                onClick={handleButtonClick}
+              >
+                <ShoppingBag className="size-4" strokeWidth={1.5} />
+                {inCart ? 'View cart' : 'Add to cart'}
+              </button>
+              <button
+                aria-label={inWishlist ? 'Remove from wishlist' : 'Save to wishlist'}
+                className="inline-flex items-center justify-center gap-2 border border-neutral-300 px-5 py-3 text-sm font-semibold uppercase tracking-widest text-neutral-900 transition hover:border-neutral-900 disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={addToWishlist.isPending || removeFromWishlist.isPending}
+                onClick={handleWishlistToggle}
+                type="button"
+              >
+                <Heart
+                  className="size-4"
+                  fill={inWishlist ? 'currentColor' : 'none'}
+                  strokeWidth={1.5}
+                />
+                {inWishlist ? 'Saved' : 'Save'}
+              </button>
+            </div>
           </div>
         </article>
       ) : null}

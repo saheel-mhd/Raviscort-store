@@ -7,8 +7,15 @@ export const routePaths = {
   orderSuccess: '/orders/success/:id',
   login: '/login',
   register: '/register',
+  accountOverview: '/account',
   myOrders: '/account/orders',
   orderDetail: '/account/orders/:id',
+  accountProfile: '/account/profile',
+  accountAddresses: '/account/addresses',
+  accountSupport: '/account/support',
+  accountSupportNew: '/account/support/new',
+  accountSupportDetail: '/account/support/:id',
+  accountWishlist: '/account/wishlist',
 } as const
 
 export function productPath(id: string) {
@@ -21,4 +28,8 @@ export function orderSuccessPath(id: string) {
 
 export function orderDetailPath(id: string) {
   return `/account/orders/${id}`
+}
+
+export function supportDetailPath(id: string) {
+  return `/account/support/${id}`
 }

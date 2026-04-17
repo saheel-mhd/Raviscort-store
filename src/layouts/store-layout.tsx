@@ -67,7 +67,7 @@ export function StoreLayout() {
               <div className="flex items-center gap-1">
                 <Link
                   className="hidden items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 sm:inline-flex"
-                  to={routePaths.myOrders}
+                  to={routePaths.accountOverview}
                 >
                   <User className="size-4" strokeWidth={1.5} />
                   <span className="max-w-[10rem] truncate">{user?.email}</span>

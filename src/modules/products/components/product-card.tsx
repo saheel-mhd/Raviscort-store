@@ -14,7 +14,7 @@ type Props = {
 }
 
 export function ProductCard({ product }: Props) {
-  const totalStock = product.variants.reduce((sum, v) => sum + v.stock, 0)
+  const totalStock = (product.variants ?? []).reduce((sum, v) => sum + v.stock, 0)
   const outOfStock = totalStock === 0
 
   return (

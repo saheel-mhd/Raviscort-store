@@ -79,7 +79,26 @@ export default function OrderSuccessPage() {
             })}
           </ul>
 
-          <div className="flex items-center justify-between border-t border-neutral-200 pt-4 text-base font-semibold text-neutral-900">
+          {query.data.discountAmount > 0 ? (
+            <>
+              <div className="flex items-center justify-between border-t border-neutral-200 pt-3 text-sm text-neutral-600">
+                <span>Subtotal</span>
+                <span className="tabular-nums">
+                  ${currencyFormatter.format(query.data.subtotalAmount)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-emerald-700">
+                <span>Discount</span>
+                <span className="tabular-nums">
+                  −${currencyFormatter.format(query.data.discountAmount)}
+                </span>
+              </div>
+            </>
+          ) : null}
+          <div className={[
+            'flex items-center justify-between text-base font-semibold text-neutral-900',
+            query.data.discountAmount > 0 ? 'pt-2' : 'border-t border-neutral-200 pt-4',
+          ].join(' ')}>
             <span>Total</span>
             <span className="tabular-nums">
               ${currencyFormatter.format(query.data.totalAmount)}
