@@ -6,6 +6,8 @@ export type LoginInput = {
 }
 
 export type RegisterInput = {
+  name: string
+  phone?: string
   email: string
   password: string
 }

@@ -1,4 +1,4 @@
-import { Heart, MapPin, Receipt, User } from 'lucide-react'
+import { Heart, MapPin, Receipt } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { usePageTitle } from '@/hooks/use-page-title'
@@ -35,7 +35,7 @@ export default function AccountOverviewPage() {
           Welcome back
         </p>
         <h1 className="mt-1 font-serif text-3xl font-normal tracking-tight text-neutral-900">
-          {user?.email ?? 'your account'}
+          {user?.name ?? user?.email ?? 'your account'}
         </h1>
       </div>
 
@@ -43,7 +43,6 @@ export default function AccountOverviewPage() {
         <StatCard icon={Receipt} label="Orders" value={orderCount} />
         <StatCard icon={MapPin} label="Addresses" value={addressCount} />
         <StatCard icon={Heart} label="Wishlist" value={wishlistCount} />
-        <StatCard icon={User} label="Profile" value="—" hint="Change password" />
       </div>
 
       <section className="border border-neutral-200 bg-white p-6">

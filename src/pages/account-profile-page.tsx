@@ -42,22 +42,6 @@ export default function AccountProfilePage() {
 
       <section className="border border-neutral-200 bg-white p-6">
         <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-900">
-          Account
-        </h2>
-        <dl className="mt-4 flex flex-col gap-3 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-neutral-500">Email</dt>
-            <dd className="text-neutral-900">{user?.email ?? '—'}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-neutral-500">Role</dt>
-            <dd className="uppercase tracking-widest text-neutral-900">{user?.role ?? '—'}</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section className="border border-neutral-200 bg-white p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-900">
           Change password
         </h2>
 

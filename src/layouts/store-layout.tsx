@@ -29,7 +29,7 @@ export function StoreLayout() {
       <header className="sticky top-0 z-20 border-b border-neutral-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
           <Link className="flex items-center gap-2 text-neutral-900" to={routePaths.home}>
-            <span className="font-serif text-2xl font-normal tracking-tight">Raviscort</span>
+            <span className="font-serif text-3xl font-normal tracking-tight sm:text-4xl">Raviscort</span>
           </Link>
 
           <nav className="flex items-center gap-5">
@@ -70,7 +70,7 @@ export function StoreLayout() {
                   to={routePaths.accountOverview}
                 >
                   <User className="size-4" strokeWidth={1.5} />
-                  <span className="max-w-[10rem] truncate">{user?.email}</span>
+                  <span className="max-w-[10rem] truncate">{user?.name ?? user?.email}</span>
                 </Link>
                 <button
                   aria-label="Sign out"
@@ -101,7 +101,7 @@ export function StoreLayout() {
       <footer className="border-t border-neutral-200 bg-white">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-8 text-xs tracking-wide text-neutral-500 sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Raviscort. All rights reserved.</p>
-          <p className="hidden uppercase tracking-[0.2em] sm:block">Crafted with care</p>
+          <p className="hidden uppercase tracking-[0.2em] sm:block">Crafted with purpose</p>
         </div>
       </footer>
     </div>
