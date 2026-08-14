@@ -1,8 +1,8 @@
 import { ArrowLeft, Package } from 'lucide-react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-
 import { extractErrorMessage } from '@/api/client'
 import { usePageTitle } from '@/hooks/use-page-title'
+import { useCancelOrder } from '@/modules/orders/hooks/use-cancel-order'
 import { useOrder } from '@/modules/orders/hooks/use-order'
 import { routePaths } from '@/routes/paths'
 
@@ -19,8 +19,16 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 export default function OrderDetailPage() {
   const { id = '' } = useParams<{ id: string }>()
   const query = useOrder(id)
+  const cancelMutation = useCancelOrder()
 
   usePageTitle(query.data ? `Order ${query.data.orderNumber}` : 'Order')
+
+  const handleCancel = () => {
+    if (!query.data) return
+    if (!window.confirm('Cancel this order? Reserved stock will be released.')) return
+
+    cancelMutation.mutate({ id: query.data.id })
+  }
 
   if (!id) {
     return <Navigate replace to={routePaths.myOrders} />
@@ -52,10 +60,34 @@ export default function OrderDetailPage() {
                 Placed {dateFormatter.format(new Date(query.data.createdAt))}
               </p>
             </div>
-            <span className="inline-flex items-center self-start bg-neutral-900 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white">
-              {query.data.status}
-            </span>
+            <div className="flex items-center gap-3 self-start">
+              <span
+                className={`inline-flex items-center px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] ${
+                  query.data.status === 'cancelled'
+                    ? 'bg-neutral-200 text-neutral-600'
+                    : 'bg-neutral-900 text-white'
+                }`}
+              >
+                {query.data.status}
+              </span>
+              {query.data.status === 'pending' ? (
+                <button
+                  className="border border-neutral-300 px-3 py-1 text-xs text-neutral-600 transition hover:border-neutral-900 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={cancelMutation.isPending}
+                  onClick={handleCancel}
+                  type="button"
+                >
+                  {cancelMutation.isPending ? 'Cancelling…' : 'Cancel order'}
+                </button>
+              ) : null}
+            </div>
           </div>
+
+          {cancelMutation.error ? (
+            <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {extractErrorMessage(cancelMutation.error, 'Unable to cancel this order')}
+            </p>
+          ) : null}
 
           <section className="border border-neutral-200 bg-white p-6">
             <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
@@ -99,6 +131,41 @@ export default function OrderDetailPage() {
               <Row label="Total" value={query.data.totalAmount} bold />
             </div>
           </section>
+
+          {query.data.shippingAddress ? (
+            <section className="border border-neutral-200 bg-white p-6">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                Delivering to
+              </h2>
+              <div className="mt-4 text-sm">
+                <p className="font-medium text-neutral-900">
+                  {query.data.shippingAddress.fullName}
+                  {query.data.shippingAddress.label ? (
+                    <span className="ml-2 text-xs uppercase tracking-wider text-neutral-500">
+                      {query.data.shippingAddress.label}
+                    </span>
+                  ) : null}
+                </p>
+                <p className="mt-1 text-neutral-600">
+                  {[
+                    query.data.shippingAddress.line1,
+                    query.data.shippingAddress.line2,
+                    query.data.shippingAddress.city,
+                    query.data.shippingAddress.state,
+                    query.data.shippingAddress.postalCode,
+                    query.data.shippingAddress.country,
+                  ]
+                    .filter(Boolean)
+                    .join(', ')}
+                </p>
+                {query.data.shippingAddress.phone ? (
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    {query.data.shippingAddress.phone}
+                  </p>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
         </div>
       ) : null}
     </div>

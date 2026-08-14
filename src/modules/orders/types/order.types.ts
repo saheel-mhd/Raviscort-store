@@ -1,4 +1,4 @@
-export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered'
+export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled'
 
 export type OrderItemSnapshot = {
   productVariantId?: string
@@ -17,11 +17,26 @@ export type OrderItemSnapshot = {
   lineTotal?: number
 }
 
+export type ShippingAddressSnapshot = {
+  addressId: string
+  label: string | null
+  fullName: string
+  phone: string | null
+  line1: string
+  line2: string | null
+  city: string
+  state: string | null
+  postalCode: string
+  country: string
+}
+
 export type Order = {
   id: string
   orderNumber: string
   customerId: string
   couponId: string | null
+  addressId: string | null
+  shippingAddress: ShippingAddressSnapshot | null
   items: OrderItemSnapshot[]
   subtotalAmount: number
   discountAmount: number
@@ -44,6 +59,8 @@ export type OrdersListResponse = {
 }
 
 export type CreateOrderInput = {
+  addressId: string
+  couponCode?: string
   items: { productVariantId: string; quantity: number }[]
 }
 

@@ -1,20 +1,17 @@
 import { useState, type FormEvent } from 'react'
 import { Loader2 } from 'lucide-react'
-
 import { extractErrorMessage } from '@/api/client'
 import { usePageTitle } from '@/hooks/use-page-title'
 import { useChangePassword } from '@/modules/account/hooks/use-change-password'
 import { useAuthStore } from '@/store/auth-store'
 
-const inputClasses =
-  'w-full border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none'
+const inputClasses = 'w-full border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none'
 
 export default function AccountProfilePage() {
   usePageTitle('Profile')
 
   const user = useAuthStore((state) => state.user)
   const { mutate, isPending, error, isSuccess, reset } = useChangePassword()
-
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
 
@@ -39,6 +36,22 @@ export default function AccountProfilePage() {
           Your details
         </h1>
       </div>
+
+      <section className="border border-neutral-200 bg-white p-6">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-900">
+          Account
+        </h2>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt className="text-xs uppercase tracking-[0.3em] text-neutral-500">Name</dt>
+            <dd className="mt-1 text-sm text-neutral-900">{user?.name ?? '—'}</dd>
+          </div>
+          <div>
+            <dt className="text-xs uppercase tracking-[0.3em] text-neutral-500">Email</dt>
+            <dd className="mt-1 text-sm text-neutral-900">{user?.email ?? '—'}</dd>
+          </div>
+        </dl>
+      </section>
 
       <section className="border border-neutral-200 bg-white p-6">
         <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-900">
